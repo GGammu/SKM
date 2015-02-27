@@ -16,34 +16,42 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Screen 640, 400
 ;Client 646, 428
 
-InitFunc()
-
-^A::
-	Gosub,CheckKey
+^!A::
+	InitFunc()
+	MsgBox start
+	Gosub, CheckKey
+	;Gosub, Test
 	return
 
-^S::
-	Pause
-	return
+;^!S::
+;	Pause
+;	return
 
-^D::
-	Reload
-	return
-^F::
+;^!D::
+;	Reload
+;	return
+	
+^!F::
 	ExitApp
 	return
 
-
+Test:
+	;ChangeHeroes()
+	ReturnMain()
+	return
+	
 CheckKey:
 	Loop {
-		if !ImageSearcher("KeyZero.bmp","F") {
-			Gosub,Adventure
-		}	
+		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
+			Gosub, Adventure
+		}
+		Sleep, 10000
 	}
+	
+	MsgBox "The End"
 	return
 	
 Adventure:
-	i:=0
 	Loop {
 		if !StartAdventure() { 
 			Break
@@ -54,28 +62,36 @@ Adventure:
 		if !FinishAdventure() {
 			Break
 		}
-		i++
 	}
-	MsgBox %i%
+	ReturnMain()
 	return
 
 StartAdventure() {
-	if ImageSearcher("AdventureEnter.bmp","F") {
-		ImageSearcher("AdventureLatest.bmp","C")
-		sleep,1000
+	if ImageSearcherOnce("EnterAdventure.bmp", "F") {
+		ImageSearcherOnce("EnterAdventure.bmp", "C")
+		Sleep, 2000
 	}
-	if ImageSearcher("KeyZero.bmp","F") {
+
+	if ImageSearcherOnce("AdventureEnter.bmp", "F") {
+		ImageSearcherOnce("AdventureLatest.bmp", "C")
+		Sleep, 2000
+	}
+	
+	if ImageSearcherOnce("KeyZero.bmp", "F") {
 		return false
 	}
 	
-	ImageSearcher("UnSelectedFirstTeam.bmp","C")
-	ImageSearcher("AdventureStart.bmp", "C") 
+	ImageSearcherOnce("UnSelectedFirstTeam.bmp", "C")
+	ImageSearcherOnce("AdventureStart.bmp", "C") 
 	
-	if ImageSearcher("FullHeros.bmp","F") {
+	Sleep, 2000
+	
+	if ImageSearcherOnce("FullHeros.bmp", "F") {
+		ImageSearcherOnce("No.bmp", "C")
 		return false
 	}
 	
-	if ImageSearcher("FailEnter.bmp","F") {
+	if ImageSearcherOnce("FailEnter.bmp", "F") {
 		return false
 	}
 	
@@ -83,213 +99,236 @@ StartAdventure() {
 }
 	
 RunningAdventure() {
-	runStage:=0
+	runStage := 0
 	
-    global stageCnt
+    Global stageCnt
 	
 	Loop {
-		Sleep,100
-		if (ImageSearcher("AdventureFirstWave.bmp","F") and runStage<1) {
-			runStage=1
+		if (ImageSearcherOnce("AdventureFirstWave.bmp", "F") and runStage < 1) {
+			runStage = 1
 			SelectSkill(runStage)
 		} 
-		if (ImageSearcher("AdventureSecondWave.bmp","F") and runStage<2) {
-			runStage=2
+		if (ImageSearcherOnce("AdventureSecondWave.bmp", "F") and runStage < 2) {
+			runStage = 2
 			SelectSkill(runStage)
 		} 
-		if (ImageSearcher("AdventureThirdWave.bmp","F") and runStage<3) {
-			runStage=3
+		if (ImageSearcherOnce("AdventureThirdWave.bmp", "F") and runStage < 3) {
+			runStage = 3
 			SelectSkill(runStage)
 		}
 		
-		if (runStage=stageCnt)  
+		if (runStage = stageCnt)  
 			return true
+		
+		Sleep, 100
 	}
 	return false
 }
 	
 FinishAdventure() {
-	global stageCnt
+	flagFinishedAdventure := IsFinishedAdventure()
 	
-	flagFinishedAdventure:=IsFinishedAdventure()
-	
-	if (flagFinishedAdventure="success") {
-		Sleep,2000
-		ClickEvent(200,200,1000)
-		ClickEvent(200,200,1000)
+	if (flagFinishedAdventure = "success") {
+		Sleep, 3000
+		ClickEvent(200, 200, 1000)
+		ClickEvent(200, 200, 1000)
 
-		if RestartAdventure() {
+		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
 			while !ConfirmAchivement() {
 			}
 		}
 		return true
-	} else if (flagFinishedAdventure="fail") {
+	} else if (flagFinishedAdventure = "fail") {
+		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
+			while !ConfirmAchivement() {
+			}
+		}
 		return true
 	}
 	return false
 }
-	
-RestartAdventure() {
-	global maxWait
-	
-	startTime := A_TickCount
-	
-	Loop {
-		Sleep,100
-		
-		if ImageSearcher("AdventureRestart.bmp","C") {
-			return true
-		}
-		
-		if ((A_TickCount - startTime) > maxWait) {
-			return false
-		}
-	}
-	return false
-}
 
-ConfirmAchivement() {
-	flagAchivement:=HasAchivement()
-	
-	if (flagAchivement = "achieve") { 
-		ImageSearcher("Confirm.bmp","C")
-		return false
-	} else if (flagAchivement="level") {
-		Sleep 1000
-		ImageSearcher("Confirm.bmp","C")
-		;Change heroes
-		return false
-	} else if (flagAchivement = "player") {
-		ImageSearcher("Confirm.bmp","C")
-		return false  
-	} else if (flagAchivement = "raid") {
-		ClickEvent(200,200,3000)
-		Sleep,2000
-		ImageSearcher("RaidOut.bmp","C")
-		sleep,1000
-		ImageSearcher("AdventureLatest.bmp","C")
-		return false
-	} else if (flagAchivement = "finish") {
-		return true
+ReturnMain() {
+	while !ImageSearcherOnce("MainScreen.bmp", "F") {
+		ClickEvent(30, 20, 100)
+		Sleep, 2000
 	}
-}
-
-HasAchivement() {
-	startTime := A_TickCount
-	
-	Loop {
-		if ImageSearcher("Achievement.bmp","F") {
-			return "achieve"
-		}
-		
-		if ImageSearcher("FullLevel.bmp","F") {
-			return "level"
-		}
-		
-		if ImageSearcher("RaidEvent.bmp","F") {
-			return "raid"
-		}
-		
-		if ImageSearcher("PlayerLevelUp.bmp","F") {
-			return "player"
-		}
-		
-		if ImageSearcher("AdventureStart.bmp","F") {
-			return "finish"
-		}
-		
-		if ((A_TickCount - startTime) > 10000) {
-			return "not"
-		}
-		Sleep,100
-	}
-	return "not"
 }
 
 IsFinishedAdventure() {
 	Loop {
-		Sleep,100
-		
-		if ImageSearcher("AdventureVictory.bmp","F") {
+		if ImageSearcherOnce("AdventureVictory.bmp", "F") {
 			return "success"
 		}
-		if ImageSearcher("AdventureFailed.bmp","F") {
+		if ImageSearcherOnce("AdventureFailed.bmp", "F") {
 			return "fail"
 		}
+		Sleep, 100
 	}
 }
 	
-InitFunc() {
-	CoordMode Pixel,Screen
+ConfirmAchivement() {
+	flagAchivement := HasAchivement()
+	
+	if (flagAchivement = "achieve") { 
+		ImageSearcherOnce("Confirm.bmp", "C")
+		return false
+	} else if (flagAchivement = "level") {
+		Sleep, 2000
+		ImageSearcherOnce("Confirm.bmp", "C")
+		;ChangeHeroes()
+		return false
+	} else if (flagAchivement = "player") {
+		ImageSearcherOnce("Confirm.bmp", "C")
+		return false  
+	} else if (flagAchivement = "raid") {
+		ClickEvent(200, 200, 3000)
+		return false
+	} else if (flagAchivement = "raidOut") {
+		ImageSearcherOnce("RaidOut.bmp", "C")
+		Sleep, 2000
+		ImageSearcherOnce("AdventureLatest.bmp", "C")
+		return false
+	} else if  (flagAchivement = "fullHero") {
+		ImageSearcherOnce("No.bmp", "C")
+		return false
+	} else if (flagAchivement = "finish") {
+		return true
+	} else {
+		return false
+	}
+}
 
-	Global scnX1,scnY1,scnX2,scnY2,scnW,scnH,maxWait,stageCnt
+HasAchivement() {
+	Global maxWait
 	
-	WinGetPos,x,y,w,h,BlueStacks App Player
-	SysGet,wFrame,7 ;System Border
-	SysGet,wCaption,4 ;System Caption
+	startTime := A_TickCount
 	
-	scnX1:=x+wFrame
-	scnY1:=y+wCaption+wFrame
-	scnW:=w-(wFrame*2)
-	scnH:=h-(wFrame*2)-wCaption
-	scnX2:=scnX1+scnW
-	scnY2:=scnY1+scnH
-	maxWait:=60000
-	stageCnt:=3
+	Loop {
+		if ImageSearcherOnce("Achievement.bmp", "F") {
+			return "achieve"
+		} else if ImageSearcherOnce("FullLevel.bmp", "F") {
+			return "level"
+		} else if ImageSearcherOnce("RaidEvent.bmp", "F") {
+			return "raid"
+		} else if ImageSearcherOnce("RaidOut.bmp", "F") {
+			return "raidOut"
+		} else if ImageSearcherOnce("PlayerLevelUp.bmp", "F") {
+			return "player"
+		} else if ImageSearcherOnce("AdventureStart.bmp", "F") {
+			return "finish"
+		} else if ImageSearcherOnce("FullHeros.bmp", "F") {
+			return "fullHero"
+		}
+		
+		if ((A_TickCount - startTime) > maxWait) {
+			return "time over"
+		}
+		
+		Sleep, 100
+	}
+	return "error"
+}
+
+ChangeHeroes() {
+	ImageSearcherOnce("HeroSetting.bmp", "C")
+	Sleep, 2000
+	
+}
+	
+InitFunc() {
+	CoordMode Pixel, Screen
+
+	Global scnX1, scnY1, scnX2, scnY2, scnW, scnH
+	Global maxWait, stageCnt
+	
+	WinGetPos, x, y, w, h, BlueStacks App Player
+	SysGet, captionH, 4 
+	SysGet, borderW, 32
+	SysGet, borderH, 33
+	
+	scnX1 := x + borderW/2
+	scnY1 := y + captionH + borderH/2
+	scnW := w - borderW
+	scnH := h - borderH - captionH
+	scnX2 := scnX1 + scnW
+	scnY2 := scnY1 + scnH
+	maxWait := 10000
+	stageCnt := 3
+	
 	return
 }
 
 ClickEvent(x, y, msec) {
-	N:=x|y<<16
+	N := x | y << 16
 
-	PostMessage,0x201,1,%N%,,BlueStacks App Player
-	PostMessage,0x202,0,%N%,,BlueStacks App Player
+	PostMessage, 0x201, 1, %N%, , BlueStacks App Player
+	PostMessage, 0x202, 0, %N%, , BlueStacks App Player
 }
 
 ;mode value : F - Find, C - Click, Hero - Find Hero
-ImageSearcher(img, mode) {
-	Global scnX1,scnY1,scnX2,scnY2
+ImageSearcherOnce(img, mode) {
+	Global scnX1,scnY1, scnX2, scnY2
 	
-	if(mode="Hero") {
-		ImageSearch,oX,oY,scnX1,scnY1,scnX2,scnY2,*150 %A_ScriptDir%\img\%img%
+	if (mode = "Hero") {
+		ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *150 %A_ScriptDir%\img\%img%
 	} else {
-		ImageSearch,oX,oY,scnX1,scnY1,scnX2,scnY2,*40 %A_ScriptDir%\img\%img%
+		ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *40 %A_ScriptDir%\img\%img%
 	}
 	
-	if(ErrorLevel<>0) {
+	if(ErrorLevel <> 0) {
 		return false
 	}
 	
-	if(mode="C"||mode="Hero") {
-		x:=oX-scnX1
-		y:=oY-scnY1
-		N:=x|y<<16
+	if(mode="C" || mode="Hero") {
+		x := oX - scnX1
+		y := oY - scnY1
+		N := x | y <<16
 		
-		PostMessage,0x201,1,%N%,,BlueStacks App Player
-		PostMessage,0x202,0,%N%,,BlueStacks App Player
-		Sleep,100
+		PostMessage, 0x201, 1, %N%, , BlueStacks App Player
+		PostMessage, 0x202, 0, %N%, , BlueStacks App Player
 	}
 	return true
 }
 
+;mode value : F - Find, C - Click, Hero - Find Hero
+ImageSearcherInfinite(img, mode) {
+	Global maxWait
+	
+	startTime := A_TickCount
+	
+	Loop {
+		if ImageSearcherOnce(img, mode) {
+			return true
+		}
+
+		if ((A_TickCount - startTime) > maxWait) {
+			return false
+		}
+		
+		Sleep, 100
+	}
+	return false
+}
+
 SelectSkill(stage) {
-	skillX:=0
-	skillY:=0
-	if(stage=1) {
-		skillX:=610
-		skillY:=275
+	skillX := 0
+	skillY := 0
+	if (stage = 1) {
+		skillX := 610
+		skillY := 275
 		ClickEvent(skillX, skillY, 1000)
 		return
 	}
-	if(stage=2) {
-		skillX:=610-240
-		skillY:=275
+	if (stage = 2) {
+		skillX := 610-240
+		skillY := 275
 		ClickEvent(skillX, skillY, 1000)
 		return
 	}
-	if(stage=3) {
-		skillX:=610-240
-		skillY:=275+70
+	if(stage = 3) {
+		skillX := 610-240
+		skillY := 275+70
 		ClickEvent(skillX, skillY, 1000)
 		return
 	}
