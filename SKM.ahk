@@ -36,9 +36,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	return
 
 Test:
-	a := ImageSearcherOnce("No.bmp", "F")
-	
-	MsgBox %a%
+	ChangeHeroes()
 	
 	return
 	
@@ -47,7 +45,7 @@ CheckKey:
 		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
 			Gosub, Adventure
 		}
-		Sleep, 600000
+		Sleep, 300000
 	}
 	return
 	
