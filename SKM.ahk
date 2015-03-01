@@ -23,21 +23,23 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	;Gosub, Test
 	return
 
-;^!S::
-;	Pause
-;	return
+^!S::
+	Pause
+	return
 
-;^!D::
-;	Reload
-;	return
+^!D::
+	Reload
+	return
 	
 ^!F::
 	ExitApp
 	return
 
 Test:
-	;ChangeHeroes()
-	ReturnMain()
+	a := ImageSearcherOnce("No.bmp", "F")
+	
+	MsgBox %a%
+	
 	return
 	
 CheckKey:
@@ -45,10 +47,8 @@ CheckKey:
 		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
 			Gosub, Adventure
 		}
-		Sleep, 10000
+		Sleep, 600000
 	}
-	
-	MsgBox "The End"
 	return
 	
 Adventure:
@@ -87,11 +87,12 @@ StartAdventure() {
 	Sleep, 2000
 	
 	if ImageSearcherOnce("FullHeros.bmp", "F") {
-		ImageSearcherOnce("No.bmp", "C")
-		return false
+		ImageSearcherOnce("AdventureRun.bmp", "C")
+		return true
 	}
 	
 	if ImageSearcherOnce("FailEnter.bmp", "F") {
+		ImageSearcherOnce("No.bmp", "C")
 		return false
 	}
 	
@@ -100,21 +101,45 @@ StartAdventure() {
 	
 RunningAdventure() {
 	runStage := 0
+    stageCnt := 3
 	
-    Global stageCnt
+	Loop { 
+		if ImageSearcherOnce("AdventureFirstWave.bmp", "F") {
+			stageCnt := 3
+			Break
+		}
+		if ImageSearcherOnce("TwoWaves.bmp", "F") {
+			stageCnt := 2
+			Break
+		}
+		Sleep, 100
+	}
 	
 	Loop {
-		if (ImageSearcherOnce("AdventureFirstWave.bmp", "F") and runStage < 1) {
-			runStage = 1
-			SelectSkill(runStage)
-		} 
-		if (ImageSearcherOnce("AdventureSecondWave.bmp", "F") and runStage < 2) {
-			runStage = 2
-			SelectSkill(runStage)
-		} 
-		if (ImageSearcherOnce("AdventureThirdWave.bmp", "F") and runStage < 3) {
-			runStage = 3
-			SelectSkill(runStage)
+		if (stageCnt = 2) {
+			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
+				runStage = 1
+				SelectSkill(runStage)
+			} 
+			if (ImageSearcherOnce("Two_Second.bmp", "F") and runStage < stageCnt and runStage < 2) {
+				runStage = 2
+				SelectSkill(runStage)
+			}
+		}
+		
+		if (stageCnt = 3) {
+			if (ImageSearcherOnce("AdventureFirstWave.bmp", "F") and runStage < stageCnt and runStage < 1) {
+				runStage = 1
+				SelectSkill(runStage)
+			} 
+			if (ImageSearcherOnce("AdventureSecondWave.bmp", "F") and runStage < stageCnt and runStage < 2) {
+				runStage = 2
+				SelectSkill(runStage)
+			} 
+			if (ImageSearcherOnce("AdventureThirdWave.bmp", "F") and runStage < stageCnt and runStage < 3) {
+				runStage = 3
+				SelectSkill(runStage)
+			}
 		}
 		
 		if (runStage = stageCnt)  
@@ -129,18 +154,20 @@ FinishAdventure() {
 	flagFinishedAdventure := IsFinishedAdventure()
 	
 	if (flagFinishedAdventure = "success") {
-		Sleep, 3000
-		ClickEvent(200, 200, 1000)
-		ClickEvent(200, 200, 1000)
-
+		Sleep, 6000
+		
 		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
+			Sleep, 3000
 			while !ConfirmAchivement() {
+				Sleep, 500
 			}
 		}
 		return true
 	} else if (flagFinishedAdventure = "fail") {
 		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
+			Sleep, 3000
 			while !ConfirmAchivement() {
+				Sleep, 500
 			}
 		}
 		return true
@@ -171,27 +198,33 @@ ConfirmAchivement() {
 	flagAchivement := HasAchivement()
 	
 	if (flagAchivement = "achieve") { 
-		ImageSearcherOnce("Confirm.bmp", "C")
+		Sleep, 1000
+		ImageSearcherInfinite("Confirm.bmp", "C")
 		return false
 	} else if (flagAchivement = "level") {
-		Sleep, 2000
-		ImageSearcherOnce("Confirm.bmp", "C")
-		;ChangeHeroes()
+		Sleep, 3000
+		ImageSearcherInfinite("Confirm.bmp", "C")
+		Sleep, 1000
+		ChangeHeroes()
 		return false
 	} else if (flagAchivement = "player") {
-		ImageSearcherOnce("Confirm.bmp", "C")
+		Sleep, 1000
+		ImageSearcherInfinite("Confirm.bmp", "C")
 		return false  
 	} else if (flagAchivement = "raid") {
+		Sleep, 1000
 		ClickEvent(200, 200, 3000)
 		return false
 	} else if (flagAchivement = "raidOut") {
-		ImageSearcherOnce("RaidOut.bmp", "C")
+		Sleep, 1000
+		ImageSearcherInfinite("RaidOut.bmp", "C")
 		Sleep, 2000
-		ImageSearcherOnce("AdventureLatest.bmp", "C")
+		ImageSearcherInfinite("AdventureLatest.bmp", "C")
 		return false
 	} else if  (flagAchivement = "fullHero") {
-		ImageSearcherOnce("No.bmp", "C")
-		return false
+		Sleep, 1000
+		ImageSearcherInfinite("AdventureRun.bmp", "C")
+		return true
 	} else if (flagAchivement = "finish") {
 		return true
 	} else {
@@ -203,7 +236,6 @@ HasAchivement() {
 	Global maxWait
 	
 	startTime := A_TickCount
-	
 	Loop {
 		if ImageSearcherOnce("Achievement.bmp", "F") {
 			return "achieve"
@@ -231,16 +263,130 @@ HasAchivement() {
 }
 
 ChangeHeroes() {
-	ImageSearcherOnce("HeroSetting.bmp", "C")
-	Sleep, 2000
+	Global changeHeroCnt
 	
+	EnterHeroManage()
+	SettingHeroView()
+	
+	Loop, %changeHeroCnt% {
+		if CheckHeroFullLevel(A_Index) {
+			Sleep, 1000
+			if EnterPartyHero(A_Index) {
+				return
+			}
+		}
+		Sleep, 1000
+	}
+	Sleep, 1000
+	LeaveHeroManage()
 }
+
+EnterHeroManage() {
+	ImageSearcherOnce("HeroSetting.bmp", "C")
+	Sleep, 1000
+}
+
+LeaveHeroManage() {
+	ImageSearcherOnce("HeroSettingMain.bmp", "C")
+	Sleep, 1000
+}
+
+SettingHeroView() {
+	ImageSearcherOnce("ViewHero.bmp", "C")
+	Sleep, 1000
+	ClickEvent(535, 60, 1000)
+	ImageSearcherOnce("SortAsc.bmp", "C")
+	Sleep, 1000
+	ClickEvent(596, 60, 1000)
+	ImageSearcherOnce("SortLevel.bmp", "C")
+	Sleep, 1000
+}
+
+CheckHeroFullLevel(i) {
+	Global changeHeroX, changeHeroY
 	
+	x := changeHeroX
+	y := changeHeroY + ((i - 1) * 67)
+	
+	Sleep, 1000
+	ClickEvent(x, y, 1000)
+	
+	if ImageSearcherOnce("HeroLevelFull.bmp", "F") {
+		ImageSearcherOnce("HeroDelete.bmp", "C")
+		return true
+	} else {
+		ImageSearcherOnce("HeroX.bmp", "C")
+		return false
+	}
+}
+
+EnterPartyHero(i) {
+	;Hero Picture size : x-96 y-140
+	;Hero Picture gap : x-9 y-4
+	
+	Loop {
+		Sleep, 1000
+		Loop, 4 {
+			Sleep, 1000
+			if CheckEnterPartyHero(A_Index) {
+				Sleep, 1000
+				if EnterHero(i) {
+					return 
+				}
+			}
+		}
+		Sleep, 1000
+		EventDragY(310, 258 , 96, 1000) ;Move 1 row
+	}
+}
+
+CheckEnterPartyHero(i) {
+	x := 268 + ((i - 1) * 105)
+	y := 184
+	
+	ClickEvent(x, y, 1000)
+	
+	if !ImageSearcherOnce("HeroPlacement.bmp", "F") {
+		ImageSearcherOnce("HeroX.bmp", "C")
+		return false
+	}
+	
+	if ImageSearcherOnce("HeroLevelFull.bmp", "F") {
+		ImageSearcherOnce("HeroPlacement.bmp", "C")
+		return true
+	}
+	
+	if !ImageSearcherOnce("HeroLevelFull.bmp", "F") {
+		ImageSearcherOnce("HeroPlacement.bmp", "C")
+		return true
+	} else {
+		ImageSearcherOnce("HeroX.bmp", "C")
+		return false
+	}
+}
+
+EnterHero(i) {
+	Global changeHeroX, changeHeroY
+	
+	x := changeHeroX
+	y := changeHeroY + ((i - 1) * 67)
+	
+	ClickEvent(x, y, 1000)
+	
+	if ImageSearcherOnce("HeroChangeFail.bmp", "F") {
+		ClickEvent(200, 200, 1000)
+		return false
+	}
+	
+	return true
+}
+ 
 InitFunc() {
 	CoordMode Pixel, Screen
 
-	Global scnX1, scnY1, scnX2, scnY2, scnW, scnH
-	Global maxWait, stageCnt
+	Global scnX1, scnY1, scnX2, scnY2, scnW, scnH, borderW, borderH, captionH
+	Global maxWait
+	Global changeHeroCnt, changeHeroX, changeHeroY
 	
 	WinGetPos, x, y, w, h, BlueStacks App Player
 	SysGet, captionH, 4 
@@ -253,17 +399,41 @@ InitFunc() {
 	scnH := h - borderH - captionH
 	scnX2 := scnX1 + scnW
 	scnY2 := scnY1 + scnH
-	maxWait := 10000
+	maxWait := 20000
 	stageCnt := 3
+	changeHeroCnt := 3
+	changeHeroX := 143
+	changeHeroY := 143
 	
 	return
 }
 
 ClickEvent(x, y, msec) {
-	N := x | y << 16
+	n := x | y << 16
+	
+	PostMessage, 0x201, 1, %n%, , BlueStacks App Player
+	PostMessage, 0x202, 0, %n%, , BlueStacks App Player
+	
+	Sleep, msec
+	return 
+}
 
-	PostMessage, 0x201, 1, %N%, , BlueStacks App Player
-	PostMessage, 0x202, 0, %N%, , BlueStacks App Player
+EventDragY(x, y, dp, msec)
+{
+	pX := x
+	pY := y
+	
+	n := pX | pY << 16
+	PostMessage, 0x201, 0, %n%, , BlueStacks App Player
+
+	pY := y - dp
+	
+	n := pX | pY << 16
+	PostMessage, 0x200, 0, %n%, , BlueStacks App Player
+	PostMessage, 0x202, 0, %n%, , BlueStacks App Player
+	
+	Sleep, msec
+	return
 }
 
 ;mode value : F - Find, C - Click, Hero - Find Hero
@@ -306,7 +476,7 @@ ImageSearcherInfinite(img, mode) {
 			return false
 		}
 		
-		Sleep, 100
+		Sleep, 200
 	}
 	return false
 }
@@ -315,19 +485,19 @@ SelectSkill(stage) {
 	skillX := 0
 	skillY := 0
 	if (stage = 1) {
-		skillX := 610
+		skillX := 610 - 180
 		skillY := 275
 		ClickEvent(skillX, skillY, 1000)
 		return
 	}
 	if (stage = 2) {
-		skillX := 610-240
+		skillX := 610 - 240
 		skillY := 275
 		ClickEvent(skillX, skillY, 1000)
 		return
 	}
 	if(stage = 3) {
-		skillX := 610-240
+		skillX := 610 - 240
 		skillY := 275+70
 		ClickEvent(skillX, skillY, 1000)
 		return
