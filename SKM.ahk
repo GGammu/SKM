@@ -196,7 +196,7 @@ ConfirmAchivement() {
 	flagAchivement := HasAchivement()
 	
 	if (flagAchivement = "achieve") { 
-		Sleep, 1000
+		Sleep, 3000
 		ImageSearcherInfinite("Confirm.bmp", "C")
 		return false
 	} else if (flagAchivement = "level") {
@@ -206,21 +206,21 @@ ConfirmAchivement() {
 		ChangeHeroes()
 		return false
 	} else if (flagAchivement = "player") {
-		Sleep, 1000
+		Sleep, 3000
 		ImageSearcherInfinite("Confirm.bmp", "C")
 		return false  
 	} else if (flagAchivement = "raid") {
-		Sleep, 1000
+		Sleep, 3000
 		ClickEvent(200, 200, 3000)
 		return false
 	} else if (flagAchivement = "raidOut") {
-		Sleep, 1000
+		Sleep, 3000
 		ImageSearcherInfinite("RaidOut.bmp", "C")
-		Sleep, 2000
+		Sleep, 3000
 		ImageSearcherInfinite("AdventureLatest.bmp", "C")
 		return false
 	} else if  (flagAchivement = "fullHero") {
-		Sleep, 1000
+		Sleep, 3000
 		ImageSearcherInfinite("AdventureRun.bmp", "C")
 		return true
 	} else if (flagAchivement = "finish") {
