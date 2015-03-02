@@ -36,20 +36,20 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	return
 
 Test:
-	Loop {
-		flag := ImageSearcherInfinite("Confirm.bmp", "F")
-		MsgBox %flag%
-		Sleep, 500
-	}
-	;ChangeHeroes()
-	
+
+    ;StartTower()
+    flag:=ImageSearcherOnce("TowerZero.bmp", "C") 
+    MsgBox %flag%
+    flag := ImageSearcherInfinite("TowerStart.bmp", "F")
+      MsgBox %flag%
 	return
 	
 CheckKey:
 	Loop {
 		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
 			Gosub, Adventure
-			Gosub, Towel
+			Gosub, Tower
+            Gosub, Arena
 		}
 		Sleep, 300000
 	}
@@ -69,26 +69,174 @@ Adventure:
 	}
 	ReturnMain()
 	return
-Towel:
+    
+Tower:
 	Loop {
-		if !StartTowel() {
+		if !StartTower() {
+            Break
 		}
+        if !RunningTower() {
+			Break
+		}
+        if !FinishTower() {
+            Break
+        }
 	}
+    ReturnMain()
 	return
 
-StartTowel() {
+Arena:
+	Loop {
+		if !StartArena() {
+            Break
+		}
+        if !FinishArena() {
+            Break
+        }
+	}
+    ReturnMain()
+	return
+
+StartArena() {
+    if ImageSearcherOnce("BattleEnter.bmp", "F") {
+		ImageSearcherOnce("BattleEnter.bmp", "C")
+		Sleep, 2000
+	}
+    
+    if ImageSearcherOnce("BattleOut.bmp", "F") {
+		ClickEvent(474, 139, 2000)
+	}
+    
+    if ImageSearcherOnce("ArenaFirstSeason.bmp", "F") {
+        ClickEvent(474, 139, 2000)
+    }
+    
+    if ImageSearcherInfinite("ArenaReady.bmp", "F") {
+        if ImageSearcherOnce("ArenaZero.bmp", "F") {
+            return false
+        }
+        
+        ImageSearcherOnce("ArenaReady.bmp", "C")
+        Sleep, 2000
+    } else {
+        return false
+    }
+    
+    if ImageSearcherOnce("ArenaStart.bmp", "F") {
+        ImageSearcherOnce("ArenaStart.bmp", "C")
+        Sleep, 2000
+        return true
+    } else {
+        return false
+    }
+    return false
+}
+
+FinishArena() {
+    Loop {
+        if ImageSearcherOnce("ArenaRestart.bmp", "C") {
+            Break
+        }
+        Sleep, 5000
+    }
+    
+    flag := HasAchivementArena()
+    return flag
+}    
+
+HasAchivementArena() {
+    startTime := A_TickCount
+    
+    Loop {
+        if ImageSearcherOnce("Achievement.bmp", "F") {
+            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+                Sleep, 1000
+                ClickEvent(570, 340, 1000)
+            }
+        }
+        
+        if ImageSearcherOnce("ArenaReady.bmp", "F") {
+            return true
+        }
+        
+        if ((A_TickCount - startTime) > maxWait) {
+			return false
+		}
+		Sleep, 200
+    }
+}    
+
+StartTower() {
 	if ImageSearcherOnce("BattleEnter.bmp", "F") {
-		ImageSearcherOnce("BattleEnter.bmp.bmp", "C")
+		ImageSearcherOnce("BattleEnter.bmp", "C")
 		Sleep, 2000
 	}
 	
-	if ImageSearcherOnce("AdventureEnter.bmp", "F") {
-		ImageSearcherOnce("AdventureLatest.bmp", "C")
-		Sleep, 2000
+	if ImageSearcherOnce("BattleOut.bmp", "F") {
+		ClickEvent(160, 139, 2000)
 	}
 	
-	
+    if ImageSearcherOnce("TowerGold.bmp", "F") {
+        ImageSearcherOnce("TowerGold.bmp", "C")
+    }
+    
+    Sleep, 2000
+    
+    if ImageSearcherInfinite("TowerStart.bmp", "F") {
+        Sleep, 1000
+        if ImageSearcherOnce("TowerZero.bmp", "F") {
+            return false
+        }
+        
+        ImageSearcherOnce("UnSelectedThirdTeam.bmp", "C")
+        ImageSearcherOnce("TowerStart.bmp", "C")
+        return true
+    } else {
+        return false
+    }
+    return true
+}
+
+RunningTower() {
+    Sleep, 5000
+    ImageSearcherOnce("UnSelectedAutoSkills.bmp", "C")
+    return true
 }	
+
+FinishTower() {
+    Loop {
+        if ImageSearcherOnce("AdventureRestart.bmp", "C") {
+            Break
+        }
+        Sleep, 5000
+    }
+    
+    flag := HasAchivementTower()
+    return flag
+}
+
+HasAchivementTower() {
+    startTime := A_TickCount
+    
+    Loop {
+        if ImageSearcherOnce("Achievement.bmp", "F") {
+            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+                Sleep, 1000
+                ClickEvent(570, 340, 1000)
+            }
+        }
+        
+        if ImageSearcherOnce("TowerStart.bmp", "F") {
+            return true
+        }
+        
+        if ((A_TickCount - startTime) > maxWait) {
+			return false
+		}
+		Sleep, 200
+    }
+    return true
+}
 
 StartAdventure() {
 	if ImageSearcherOnce("EnterAdventure.bmp", "F") {
@@ -122,7 +270,7 @@ StartAdventure() {
 	
 	return true
 }
-	
+
 RunningAdventure() {
 	runStage := 0
     stageCnt := 3
@@ -139,6 +287,8 @@ RunningAdventure() {
 		Sleep, 100
 	}
 	
+    ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
+    
 	Loop {
 		if (stageCnt = 2) {
 			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
@@ -335,12 +485,12 @@ ChangeHeroes() {
 }
 
 EnterHeroManage() {
-	ImageSearcherOnce("HeroSetting.bmp", "C")
+	ImageSearcherInfinite("HeroSetting.bmp", "C")
 	Sleep, 1000
 }
 
 LeaveHeroManage() {
-	ImageSearcherOnce("HeroSettingMain.bmp", "C")
+	ImageSearcherInfinite("HeroSettingMain.bmp", "C")
 	Sleep, 1000
 }
 
