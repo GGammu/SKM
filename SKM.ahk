@@ -16,27 +16,32 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Screen 640, 400
 ;Client 646, 428
 
-^!A::
+~^!A::
 	InitFunc()
 	MsgBox start
 	Gosub, CheckKey
 	;Gosub, Test
 	return
 
-^!S::
+~^!S::
 	Pause
 	return
 
-^!D::
+~^!D::
 	Reload
 	return
 	
-^!F::
+~^!F::
 	ExitApp
 	return
 
 Test:
-	ChangeHeroes()
+	Loop {
+		flag := ImageSearcherInfinite("Confirm.bmp", "F")
+		MsgBox %flag%
+		Sleep, 500
+	}
+	;ChangeHeroes()
 	
 	return
 	
@@ -44,6 +49,7 @@ CheckKey:
 	Loop {
 		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
 			Gosub, Adventure
+			Gosub, Towel
 		}
 		Sleep, 300000
 	}
@@ -63,6 +69,26 @@ Adventure:
 	}
 	ReturnMain()
 	return
+Towel:
+	Loop {
+		if !StartTowel() {
+		}
+	}
+	return
+
+StartTowel() {
+	if ImageSearcherOnce("BattleEnter.bmp", "F") {
+		ImageSearcherOnce("BattleEnter.bmp.bmp", "C")
+		Sleep, 2000
+	}
+	
+	if ImageSearcherOnce("AdventureEnter.bmp", "F") {
+		ImageSearcherOnce("AdventureLatest.bmp", "C")
+		Sleep, 2000
+	}
+	
+	
+}	
 
 StartAdventure() {
 	if ImageSearcherOnce("EnterAdventure.bmp", "F") {
@@ -150,21 +176,88 @@ RunningAdventure() {
 	
 FinishAdventure() {
 	flagFinishedAdventure := IsFinishedAdventure()
-	
-	if (flagFinishedAdventure = "success") {
+	changeHero := 0
+    
+    if (flagFinishedAdventure = "success") {
 		Sleep, 6000
 		
 		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
 			Sleep, 3000
-			while !ConfirmAchivement() {
+            
+			Loop {
+				flagAchive := HasAchivement() 
+                
+                if (flagAchive = "achieve") { 
+                    Sleep, 1000
+                    
+                    if !ImageSearcherInfinite("Confirm.bmp", "C") {
+                        Sleep, 1000
+                        ClickEvent(570, 340, 1000)
+                    }
+                } else if (flagAchive = "level") {
+                    Sleep, 1000
+           
+                    if !ImageSearcherInfinite("Confirm.bmp", "C") {
+                        Sleep, 1000
+                        ClickEvent(570, 340, 1000)
+                    }
+                    
+                    changeHero = 1
+                } else if (flagAchive = "player") {
+                    Sleep, 1000
+                    
+                    if !ImageSearcherInfinite("Confirm.bmp", "C") {
+                        Sleep, 1000
+                        ClickEvent(570, 340, 1000)
+                    }
+                } else if (flagAchive = "raid") {
+                    Sleep, 1000
+                    ClickEvent(200, 200, 1000)
+                } else if (flagAchive = "raidOut") {
+                    Sleep, 1000
+                    ImageSearcherInfinite("RaidOut.bmp", "C")
+                    Sleep, 1000
+                    ImageSearcherInfinite("AdventureLatest.bmp", "C")
+                } else if (flagAchive = "finish") {
+                    Break
+                } 
+				
 				Sleep, 500
 			}
+            
+            if (changeHero = 1) {
+                ChangeHeroes()
+            }
 		}
 		return true
 	} else if (flagFinishedAdventure = "fail") {
 		if ImageSearcherInfinite("AdventureRestart.bmp", "C") {
 			Sleep, 3000
-			while !ConfirmAchivement() {
+			Loop {
+				flagAchive := HasAchivement() 
+                
+                if (flagAchive = "achieve") { 
+                    Sleep, 1000
+                    ImageSearcherInfinite("Confirm.bmp", "C")
+                } else if (flagAchive = "level") {
+                    Sleep, 1000
+                    ImageSearcherInfinite("Confirm.bmp", "C")
+                    changeHero = 1
+                } else if (flagAchive = "player") {
+                    Sleep, 1000
+                    ImageSearcherInfinite("Confirm.bmp", "C")
+                } else if (flagAchive = "raid") {
+                    Sleep, 1000
+                    ClickEvent(200, 200, 1000)
+                } else if (flagAchive = "raidOut") {
+                    Sleep, 1000
+                    ImageSearcherInfinite("RaidOut.bmp", "C")
+                    Sleep, 1000
+                    ImageSearcherInfinite("AdventureLatest.bmp", "C")
+                } else if (flagAchive = "finish") {
+                    Break
+                } 
+				
 				Sleep, 500
 			}
 		}
@@ -189,44 +282,6 @@ IsFinishedAdventure() {
 			return "fail"
 		}
 		Sleep, 100
-	}
-}
-	
-ConfirmAchivement() {
-	flagAchivement := HasAchivement()
-	
-	if (flagAchivement = "achieve") { 
-		Sleep, 3000
-		ImageSearcherInfinite("Confirm.bmp", "C")
-		return false
-	} else if (flagAchivement = "level") {
-		Sleep, 3000
-		ImageSearcherInfinite("Confirm.bmp", "C")
-		Sleep, 1000
-		ChangeHeroes()
-		return false
-	} else if (flagAchivement = "player") {
-		Sleep, 3000
-		ImageSearcherInfinite("Confirm.bmp", "C")
-		return false  
-	} else if (flagAchivement = "raid") {
-		Sleep, 3000
-		ClickEvent(200, 200, 3000)
-		return false
-	} else if (flagAchivement = "raidOut") {
-		Sleep, 3000
-		ImageSearcherInfinite("RaidOut.bmp", "C")
-		Sleep, 3000
-		ImageSearcherInfinite("AdventureLatest.bmp", "C")
-		return false
-	} else if  (flagAchivement = "fullHero") {
-		Sleep, 3000
-		ImageSearcherInfinite("AdventureRun.bmp", "C")
-		return true
-	} else if (flagAchivement = "finish") {
-		return true
-	} else {
-		return false
 	}
 }
 
@@ -397,7 +452,7 @@ InitFunc() {
 	scnH := h - borderH - captionH
 	scnX2 := scnX1 + scnW
 	scnY2 := scnY1 + scnH
-	maxWait := 20000
+	maxWait := 10000
 	stageCnt := 3
 	changeHeroCnt := 3
 	changeHeroX := 143
@@ -441,7 +496,7 @@ ImageSearcherOnce(img, mode) {
 	if (mode = "Hero") {
 		ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *150 %A_ScriptDir%\img\%img%
 	} else {
-		ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *40 %A_ScriptDir%\img\%img%
+		ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *50 %A_ScriptDir%\img\%img%
 	}
 	
 	if(ErrorLevel <> 0) {
