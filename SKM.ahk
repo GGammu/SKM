@@ -34,15 +34,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
-
-Test:
-
-    ;StartTower()
-    flag:=ImageSearcherOnce("TowerZero.bmp", "C") 
-    MsgBox %flag%
-    flag := ImageSearcherInfinite("TowerStart.bmp", "F")
-      MsgBox %flag%
-	return
 	
 CheckKey:
 	Loop {
@@ -51,7 +42,7 @@ CheckKey:
 			Gosub, Tower
             Gosub, Arena
 		}
-		Sleep, 300000
+		Sleep, 60000
 	}
 	return
 	
@@ -145,6 +136,8 @@ FinishArena() {
 }    
 
 HasAchivementArena() {
+    Global maxWait
+      
     startTime := A_TickCount
     
     Loop {
@@ -216,6 +209,8 @@ FinishTower() {
 }
 
 HasAchivementTower() {
+    Global maxWait
+    
     startTime := A_TickCount
     
     Loop {
