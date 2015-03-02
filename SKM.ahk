@@ -236,22 +236,39 @@ HasAchivementTower() {
 }
 
 StartAdventure() {
+    step := 0
+    
 	if ImageSearcherOnce("EnterAdventure.bmp", "F") {
-		ImageSearcherOnce("EnterAdventure.bmp", "C")
-		Sleep, 2000
+        step = 1
+        
+    	if ImageSearcherInfinite("EnterAdventure.bmp", "C") {
+            Sleep, 2000
+        } else {
+            return false
+        }
 	}
-
-	if ImageSearcherOnce("AdventureEnter.bmp", "F") {
-		ImageSearcherOnce("AdventureLatest.bmp", "C")
-		Sleep, 2000
-	}
-	
+    
+    if (step = 1 or ImageSearcherOnce("AdventureEnter.bmp", "F") or ImageSearcherOnce("AdventureLatest.bmp", "F")) {
+        if ImageSearcherInfinite("AdventureLatest.bmp", "C") {
+            Sleep, 2000
+        } else {
+            return false
+        }
+    }
+    
 	if ImageSearcherOnce("KeyZero.bmp", "F") {
 		return false
 	}
 	
 	ImageSearcherOnce("UnSelectedFirstTeam.bmp", "C")
-	ImageSearcherOnce("AdventureStart.bmp", "C") 
+    
+    Sleep, 1000
+    
+	if ImageSearcherInfinite("AdventureStart.bmp", "F") {
+        ImageSearcherOnce("AdventureStart.bmp", "C")
+    } else {
+        return false
+    }
 	
 	Sleep, 2000
 	
@@ -384,6 +401,7 @@ FinishAdventure() {
     if (changeHero = 1) {
         ChangeHeroes()
     }
+    
     return true
 }
 
