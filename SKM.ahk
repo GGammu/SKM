@@ -140,7 +140,7 @@ HasAchivementArena() {
     startTime := A_TickCount
     
     Loop {
-        if ImageSearcherOnce("Achievement.bmp", "F") {
+        if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 1000)
@@ -216,7 +216,7 @@ HasAchivementTower() {
     startTime := A_TickCount
     
     Loop {
-        if ImageSearcherOnce("Achievement.bmp", "F") {
+        if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 1000)
@@ -326,9 +326,9 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 15000
+		Sleep, 10000
     } else {
-        Sleep, 10000
+        Sleep, 7000
     }
     
     if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
@@ -411,9 +411,10 @@ HasAchivement() {
 	
 	startTime := A_TickCount
 	Loop {
-		if ImageSearcherOnce("Achievement.bmp", "F") {
+		if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
 			return "achieve"
-		} else if ImageSearcherOnce("FullLevel.bmp", "F") {
+		} else if (ImageSearcherOnce("FullLevel.bmp", "F") or ImageSearcherOnce("FullLevel_1.bmp", "F") 
+				or ImageSearcherOnce("FullLevel_2.bmp", "F") or ImageSearcherOnce("FullLevel_3.bmp", "F")) {
 			return "level"
 		} else if ImageSearcherOnce("RaidEvent.bmp", "F") {
 			return "raid"
