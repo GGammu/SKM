@@ -9,6 +9,8 @@
 ;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+#SingleInstance ignore
+
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
@@ -19,8 +21,9 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!A::
 	InitFunc()
 	MsgBox start
-	Gosub, CheckKey
-	return
+	;Gosub, CheckKey
+    Gosub, Test
+    return
 
 ~^!S::
 	Pause
@@ -33,7 +36,19 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
-	
+Test:
+    
+    Loop {
+        FileReadLine, line, %A_ScriptDir%\Config.txt, %A_Index%
+        
+        if ErrorLevel
+            Break
+        
+        msgbox
+        
+    }
+    return
+    
 CheckKey:
 	Loop {
 		if !ImageSearcherOnce("KeyZeroMain.bmp", "F") {
@@ -41,8 +56,11 @@ CheckKey:
 			Gosub, Tower
             Gosub, Arena
 		}
-		Sleep, 300000
+		Sleep, 60000
 	}
+    
+    MsgBox "End"
+    
 	return
 	
 Adventure:
@@ -264,23 +282,31 @@ StartAdventure() {
     
     Sleep, 1000
     
-	if ImageSearcherInfinite("AdventureStart.bmp", "F") {
-        ImageSearcherOnce("AdventureStart.bmp", "C")
+    if ImageSearcherInfinite("AdventureStart.bmp", "F") {
+        Loop {
+            Sleep, 1000
+            
+            ImageSearcherOnce("AdventureStart.bmp", "C")
+            
+            Sleep, 2000
+        
+            if ImageSearcherOnce("FullHeros.bmp", "F") {
+                ImageSearcherOnce("AdventureRun.bmp", "C")
+                Break
+            }
+            
+            if ImageSearcherOnce("FailEnter.bmp", "F") {
+                ImageSearcherOnce("No.bmp", "C")
+                return false
+            }
+            
+            if !ImageSearcherOnce("AdventureStart.bmp", "F") {
+                Break
+            }
+        }
     } else {
         return false
     }
-	
-	Sleep, 2000
-	
-	if ImageSearcherOnce("FullHeros.bmp", "F") {
-		ImageSearcherOnce("AdventureRun.bmp", "C")
-		return true
-	}
-	
-	if ImageSearcherOnce("FailEnter.bmp", "F") {
-		ImageSearcherOnce("No.bmp", "C")
-		return false
-	}
 	
 	return true
 }
@@ -348,11 +374,17 @@ FinishAdventure() {
         Sleep, 7000
     }
     
-    if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
-        Sleep, 1000
-        ImageSearcherOnce("AdventureRestart.bmp", "C")
-    } else {
-        ClickEvent(600, 105, 1000)
+    Loop {
+        if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
+            Sleep, 1000
+            ImageSearcherOnce("AdventureRestart.bmp", "C")
+        } else {
+            ClickEvent(600, 105, 1000)
+        }
+        
+        if !ImageSearcherInfinite("AdventureRestart.bmp", "F") {
+            Break
+        }
     }
             
     Sleep, 3000
