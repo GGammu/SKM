@@ -21,8 +21,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!A::
 	InitFunc()
 	MsgBox start
-	;Gosub, CheckKey
-    Gosub, Test
+	Gosub, CheckKey
     return
 
 ~^!S::
@@ -36,18 +35,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
-Test:
-    
-    Loop {
-        FileReadLine, line, %A_ScriptDir%\Config.txt, %A_Index%
-        
-        if ErrorLevel
-            Break
-        
-        msgbox
-        
-    }
-    return
     
 CheckKey:
 	Loop {
