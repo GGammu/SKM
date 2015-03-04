@@ -513,8 +513,8 @@ ChangeHeroes() {
 	EnterHeroManage()
 	
 	Loop, %changeHeroCnt% {
-		SettingHeroView()
 		if CheckHeroFullLevel(A_Index) {
+            SettingHeroView()
 			Sleep, 1000
 			if EnterPartyHero(A_Index) {
 				return
@@ -650,6 +650,20 @@ InitFunc() {
 	changeHeroX := 143
 	changeHeroY := 143
 	
+    Loop
+    {
+        FileReadLine, line, %A_ScriptDir%\Config.txt, %A_Index%
+        
+        if ErrorLevel
+            break
+        
+        changeHeroCnt := line
+        
+        if (line = "") {
+            Break
+        }
+    }
+    
 	return
 }
 
@@ -736,6 +750,10 @@ SelectSkill(stage) {
         
         positionArray := line
         
+        if (positionArray = "") {
+            Break
+        }
+        
         StringSplit, skillPosition, positionArray, `,
         
         skillStage = %skillPosition1%   
@@ -744,10 +762,6 @@ SelectSkill(stage) {
         
         if (stage = skillStage) {
             ClickSkill(skillX, skillY)
-        }
-        
-        if (positionArray = "") {
-            Break
         }
     }
 }
