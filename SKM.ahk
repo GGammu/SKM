@@ -9,7 +9,7 @@
 ;
 
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-#SingleInstance ignore
+#SingleInstance force
 
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
@@ -22,6 +22,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	InitFunc()
 	MsgBox start
 	Gosub, CheckKey
+    ;Gosub, Test
     return
 
 ~^!S::
@@ -35,6 +36,36 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
+
+Test: 
+    ;flag := ImageSearcherOnce("FailEnter.bmp", "F")
+    ;MsgBox %flag%
+    ;flag := ImageSearcherOnce("No.bmp", "F")
+    ;MsgBox %flag%
+    
+    Loop
+    {
+        FileReadLine, line, %A_ScriptDir%\skill.txt, %A_Index%
+        
+        if ErrorLevel
+            break
+        
+        positionArray := line
+        
+        StringSplit, skillPosition, positionArray, `,
+        
+        skillStage = %skillPosition1%   
+        skillX = %skillPosition2%
+        skillY = %skillPosition3%
+        
+        ;MsgBox %skillStage% - %skillX% - %skillY%
+        
+        if (positionArray = "") {
+            Break
+        }
+    }
+    
+    return
     
 CheckKey:
 	Loop {
@@ -283,7 +314,9 @@ StartAdventure() {
             }
             
             if ImageSearcherOnce("FailEnter.bmp", "F") {
-                ImageSearcherOnce("No.bmp", "C")
+                if !ImageSearcherInfinite("No.bmp", "C") {
+                    ClickEvent(240, 275, 500)
+                } 
                 return false
             }
             
@@ -478,9 +511,9 @@ ChangeHeroes() {
 	Global changeHeroCnt
 	
 	EnterHeroManage()
-	SettingHeroView()
 	
 	Loop, %changeHeroCnt% {
+        SettingHeroView()
 		if CheckHeroFullLevel(A_Index) {
 			Sleep, 1000
 			if EnterPartyHero(A_Index) {
@@ -694,25 +727,35 @@ ImageSearcherInfinite(img, mode) {
 }
 
 SelectSkill(stage) {
-	skillX := 0
-	skillY := 0
-	if (stage = 1) {
-		skillX := 610 - 180
-		skillY := 275
-		ClickEvent(skillX, skillY, 1000)
-		return
-	}
-	if (stage = 2) {
-		skillX := 610 - 240
-		skillY := 275
-		ClickEvent(skillX, skillY, 1000)
-		return
-	}
-	if(stage = 3) {
-		skillX := 610 - 240
-		skillY := 275+70
-		ClickEvent(skillX, skillY, 1000)
-		return
-	}
-	return
+	Loop
+    {
+        FileReadLine, line, %A_ScriptDir%\skill.txt, %A_Index%
+        
+        if ErrorLevel
+            break
+        
+        positionArray := line
+        
+        StringSplit, skillPosition, positionArray, `,
+        
+        skillStage = %skillPosition1%   
+        skillX = %skillPosition2%
+        skillY = %skillPosition3%
+        
+        if (stage = skillStage) {
+            ClickSkill(skillX, skillY)
+        }
+        
+        if (positionArray = "") {
+            Break
+        }
+    }
+}
+
+ClickSkill(x, y) {
+    skillX := 610 - 60 * (x - 1)
+    skillY := 275 + 70 * (y - 1)
+    
+    ClickEvent(skillX, skillY, 500)
+    return
 }
