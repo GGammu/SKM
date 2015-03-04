@@ -302,11 +302,11 @@ StartAdventure() {
     
     if ImageSearcherInfinite("AdventureStart.bmp", "F") {
         Loop {
-            Sleep, 1000
+            Sleep, 500
             
             ImageSearcherOnce("AdventureStart.bmp", "C")
             
-            Sleep, 2000
+            Sleep, 1000
         
             if ImageSearcherOnce("FullHeros.bmp", "F") {
                 ImageSearcherOnce("AdventureRun.bmp", "C")
@@ -513,7 +513,12 @@ ChangeHeroes() {
 	EnterHeroManage()
 	
 	Loop, %changeHeroCnt% {
+<<<<<<< HEAD
         SettingHeroView()
+=======
+		SettingHeroView()
+		
+>>>>>>> origin/master
 		if CheckHeroFullLevel(A_Index) {
 			Sleep, 1000
 			if EnterPartyHero(A_Index) {
