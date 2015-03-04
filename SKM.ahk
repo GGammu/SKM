@@ -513,12 +513,7 @@ ChangeHeroes() {
 	EnterHeroManage()
 	
 	Loop, %changeHeroCnt% {
-<<<<<<< HEAD
-        SettingHeroView()
-=======
 		SettingHeroView()
-		
->>>>>>> origin/master
 		if CheckHeroFullLevel(A_Index) {
 			Sleep, 1000
 			if EnterPartyHero(A_Index) {
