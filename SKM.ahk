@@ -298,7 +298,7 @@ StartAdventure() {
 	
 	ImageSearcherOnce("UnSelectedFirstTeam.bmp", "C")
     
-    Sleep, 1000
+    Sleep, 500
     
     if ImageSearcherInfinite("AdventureStart.bmp", "F") {
         Loop {
@@ -445,7 +445,9 @@ FinishAdventure() {
             ImageSearcherInfinite("AdventureLatest.bmp", "C")
         } else if (flagAchive = "finish") {
             Break
-        } 
+        } else {
+			return false
+		}
         
         Sleep, 500
     }
@@ -735,7 +737,7 @@ ImageSearcherInfinite(img, mode) {
 			return false
 		}
 		
-		Sleep, 200
+		Sleep, 100
 	}
 	return false
 }
