@@ -396,10 +396,10 @@ FinishAdventure() {
     
     Loop {
         if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
-            Sleep, 1000
+            Sleep, 500
             ImageSearcherOnce("AdventureRestart.bmp", "C")
         } else {
-            ClickEvent(600, 105, 1000)
+            ClickEvent(600, 105, 500)
         }
         
         if !ImageSearcherInfinite("AdventureRestart.bmp", "F") {
@@ -407,41 +407,41 @@ FinishAdventure() {
         }
     }
             
-    Sleep, 3000
+    Sleep, 500
             
     Loop {
         flagAchive := HasAchivement() 
         
         if (flagAchive = "achieve") { 
-            Sleep, 1000
+            Sleep, 500
             
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 1000
-                ClickEvent(570, 340, 1000)
+                Sleep, 500
+                ClickEvent(570, 340, 500)
             }
         } else if (flagAchive = "level") {
-            Sleep, 1000
+            Sleep, 500
    
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 1000
-                ClickEvent(570, 340, 1000)
+                Sleep, 500
+                ClickEvent(570, 340, 500)
             }
             
             changeHero = 1
         } else if (flagAchive = "player") {
-            Sleep, 1000
+            Sleep, 500
             
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 1000
-                ClickEvent(570, 340, 1000)
+                Sleep, 500
+                ClickEvent(570, 340, 500)
             }
         } else if (flagAchive = "raid") {
-            Sleep, 1000
-            ClickEvent(200, 200, 1000)
+            Sleep, 500
+            ClickEvent(200, 200, 500)
         } else if (flagAchive = "raidOut") {
-            Sleep, 1000
+            Sleep, 500
             ImageSearcherInfinite("RaidOut.bmp", "C")
-            Sleep, 1000
+            Sleep, 500
             ImageSearcherInfinite("AdventureLatest.bmp", "C")
         } else if (flagAchive = "finish") {
             Break
