@@ -765,6 +765,7 @@ SelectSkill(stage) {
         if (stage = skillStage) {
             ClickSkill(skillX, skillY)
         }
+		Sleep, 200
     }
 }
 
