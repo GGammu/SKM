@@ -305,11 +305,11 @@ RunningAdventure() {
 	
 	runStage := 0
     
-    ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
-    
 	startTime := A_TickCount
 	
 	Loop {
+		ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
+		
 		if (stageCnt = 2) {
 			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
 				runStage = 1
