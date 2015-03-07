@@ -22,7 +22,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	InitFunc()
 	MsgBox start
 	Gosub, CheckKey
-    ;Gosub, Test
     return
 
 ~^!S::
@@ -36,6 +35,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
+<<<<<<< HEAD
 
 Test: 
     flag := ImageSearcherOnce("FailAdventureRestart.bmp", "F")
@@ -64,6 +64,8 @@ Test:
     }
     
     return
+=======
+>>>>>>> origin/master
     
 CheckKey:
 	Loop {
@@ -330,32 +332,28 @@ StartAdventure() {
 }
 
 RunningAdventure() {
+	Global stageCnt
+	
 	runStage := 0
-    stageCnt := 3
-	
-	Loop { 
-		if ImageSearcherOnce("AdventureFirstWave.bmp", "F") {
-			stageCnt := 3
-			Break
-		}
-		if ImageSearcherOnce("TwoWaves.bmp", "F") {
-			stageCnt := 2
-			Break
-		}
-		Sleep, 100
-	}
-	
-    ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
     
+<<<<<<< HEAD
     Loop {
+=======
+	startTime := A_TickCount
+	
+	Loop {
+		ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
+		
+>>>>>>> origin/master
 		if (stageCnt = 2) {
 			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
 				runStage = 1
 				SelectSkill(runStage)
-			} 
+			}
 			if (ImageSearcherOnce("Two_Second.bmp", "F") and runStage < stageCnt and runStage < 2) {
 				runStage = 2
 				SelectSkill(runStage)
+				cnt := 0
 			}
 		} 
         
@@ -376,7 +374,15 @@ RunningAdventure() {
 
 		if (runStage = stageCnt)  
 			return true
+<<<<<<< HEAD
 
+=======
+		
+		if ((A_TickCount - startTime) > 300000) {
+			return true
+		}
+		
+>>>>>>> origin/master
 		Sleep, 100
 	}
 	return false
@@ -630,7 +636,7 @@ InitFunc() {
 	CoordMode Pixel, Screen
 
 	Global scnX1, scnY1, scnX2, scnY2, scnW, scnH, borderW, borderH, captionH
-	Global maxWait
+	Global maxWait, stageCnt
 	Global changeHeroCnt, changeHeroX, changeHeroY
 	
 	WinGetPos, x, y, w, h, BlueStacks App Player
@@ -657,8 +663,16 @@ InitFunc() {
         if ErrorLevel
             break
         
-        changeHeroCnt := line
-        
+		idx = %A_Index%
+		
+		if (idx = 1) {
+			changeHeroCnt := line
+        }
+		
+		if (idx = 2) {
+			stageCnt := line
+        }
+		
         if (line = "") {
             Break
         }
@@ -763,7 +777,11 @@ SelectSkill(stage) {
         if (stage = skillStage) {
             ClickSkill(skillX, skillY)
         }
+<<<<<<< HEAD
         Sleep, 200
+=======
+		Sleep, 200
+>>>>>>> origin/master
     }
 }
 
