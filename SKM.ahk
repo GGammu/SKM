@@ -35,37 +35,6 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!F::
 	ExitApp
 	return
-<<<<<<< HEAD
-
-Test: 
-    flag := ImageSearcherOnce("FailAdventureRestart.bmp", "F")
-    MsgBox %flag%
-    
-    Loop
-    {
-        FileReadLine, line, %A_ScriptDir%\skill.txt, %A_Index%
-        
-        if ErrorLevel
-            break
-        
-        positionArray := line
-        
-        StringSplit, skillPosition, positionArray, `,
-        
-        skillStage = %skillPosition1%   
-        skillX = %skillPosition2%
-        skillY = %skillPosition3%
-        
-        ;MsgBox %skillStage% - %skillX% - %skillY%
-        
-        if (positionArray = "") {
-            Break
-        }
-    }
-    
-    return
-=======
->>>>>>> origin/master
     
 CheckKey:
 	Loop {
@@ -336,15 +305,11 @@ RunningAdventure() {
 	
 	runStage := 0
     
-<<<<<<< HEAD
-    Loop {
-=======
 	startTime := A_TickCount
 	
 	Loop {
 		ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
 		
->>>>>>> origin/master
 		if (stageCnt = 2) {
 			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
 				runStage = 1
@@ -374,15 +339,10 @@ RunningAdventure() {
 
 		if (runStage = stageCnt)  
 			return true
-<<<<<<< HEAD
-
-=======
-		
 		if ((A_TickCount - startTime) > 300000) {
 			return true
 		}
 		
->>>>>>> origin/master
 		Sleep, 100
 	}
 	return false
@@ -777,11 +737,8 @@ SelectSkill(stage) {
         if (stage = skillStage) {
             ClickSkill(skillX, skillY)
         }
-<<<<<<< HEAD
-        Sleep, 200
-=======
+
 		Sleep, 200
->>>>>>> origin/master
     }
 }
 
