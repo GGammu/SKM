@@ -38,10 +38,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	return
 
 Test: 
-    ;flag := ImageSearcherOnce("FailEnter.bmp", "F")
-    ;MsgBox %flag%
-    ;flag := ImageSearcherOnce("No.bmp", "F")
-    ;MsgBox %flag%
+    flag := ImageSearcherOnce("FailAdventureRestart.bmp", "F")
+    MsgBox %flag%
     
     Loop
     {
@@ -349,7 +347,7 @@ RunningAdventure() {
 	
     ImageSearcherOnce("SelectedAutoSkills.bmp", "C")
     
-	Loop {
+    Loop {
 		if (stageCnt = 2) {
 			if (ImageSearcherOnce("TwoWaves.bmp", "F") and runStage < stageCnt and runStage < 1) {
 				runStage = 1
@@ -359,9 +357,9 @@ RunningAdventure() {
 				runStage = 2
 				SelectSkill(runStage)
 			}
-		}
-		
-		if (stageCnt = 3) {
+		} 
+        
+        if (stageCnt = 3) {
 			if (ImageSearcherOnce("AdventureFirstWave.bmp", "F") and runStage < stageCnt and runStage < 1) {
 				runStage = 1
 				SelectSkill(runStage)
@@ -375,10 +373,10 @@ RunningAdventure() {
 				SelectSkill(runStage)
 			}
 		}
-		
+
 		if (runStage = stageCnt)  
 			return true
-		
+
 		Sleep, 100
 	}
 	return false
@@ -765,6 +763,7 @@ SelectSkill(stage) {
         if (stage = skillStage) {
             ClickSkill(skillX, skillY)
         }
+        Sleep, 200
     }
 }
 
