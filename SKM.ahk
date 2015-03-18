@@ -524,7 +524,7 @@ ChangingHeroes() {
 			Sleep, 2000
 			
 			if (position1 <> 0) {
-				Sleep, 1000
+				Sleep, 2000
 				if (EnterHero(1)) 
                     position1 := 0
 				Sleep, 2000
@@ -532,7 +532,7 @@ ChangingHeroes() {
             }
             
             if (position2 <> 0) {
-				Sleep, 1000
+				Sleep, 2000
                 if (EnterHero(2)) 
                     position2 := 0
 				Sleep, 2000
@@ -540,7 +540,7 @@ ChangingHeroes() {
             }
             
             if (position3 <> 0) {
-				Sleep, 1000
+				Sleep, 2000
                 if (EnterHero(3)) 
                     position3 := 0
 				Sleep, 2000
@@ -548,7 +548,7 @@ ChangingHeroes() {
             }
             
             if (position4 <> 0) {
-				Sleep, 1000
+				Sleep, 2000
                 if (EnterHero(4)) 
                     position4 := 0
 				Sleep, 2000
