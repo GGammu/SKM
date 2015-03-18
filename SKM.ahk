@@ -21,8 +21,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!A::
 	InitFunc()
 	MsgBox start
-	Gosub, CheckKey
-    ;Gosub, Test
+	;Gosub, CheckKey
+    Gosub, Test
     return
 
 ~^!S::
@@ -513,39 +513,45 @@ ChangingHeroes() {
             
     Loop {
         Loop, 4 {
-            if (position1 + position2 + position3 + position4 = 0) 
+			if (position1 + position2 + position3 + position4 = 0) 
                 return
             
-            if !CheckEnterPartyHero(A_Index) 
+            if !CheckEnterPartyHero(A_Index) {
+				Sleep, 2000
                 Continue
+			}
             
-            Sleep, 2000
-            
-            if (position1 <> 0) {
-                Sleep, 2000
-                if (EnterHero(1)) 
+			Sleep, 2000
+			
+			if (position1 <> 0) {
+				Sleep, 1000
+				if (EnterHero(1)) 
                     position1 := 0
+				Sleep, 2000
                 Continue
             }
             
             if (position2 <> 0) {
-                Sleep, 2000
+				Sleep, 1000
                 if (EnterHero(2)) 
                     position2 := 0
+				Sleep, 2000
                 Continue
             }
             
             if (position3 <> 0) {
-                Sleep, 2000
+				Sleep, 1000
                 if (EnterHero(3)) 
                     position3 := 0
+				Sleep, 2000
                 Continue
             }
             
             if (position4 <> 0) {
-                Sleep, 2000
+				Sleep, 1000
                 if (EnterHero(4)) 
                     position4 := 0
+				Sleep, 2000
                 Continue
             }
             
