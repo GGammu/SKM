@@ -516,14 +516,9 @@ ChangingHeroes() {
                 return
             
             if !CheckEnterPartyHero(A_Index) {
-<<<<<<< HEAD
-                Continue
-            }
-=======
 				Sleep, 2000
                 Continue
 			}
->>>>>>> origin/master
             
 			Sleep, 2000
 			
