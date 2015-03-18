@@ -359,17 +359,17 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 10000
+		Sleep, 7000
     } else {
         Sleep, 7000
     }
     
     Loop {
         if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
-            Sleep, 500
+            Sleep, 1000
             ImageSearcherOnce("AdventureRestart.bmp", "C")
         } else {
-            ClickEvent(600, 105, 500)
+            ClickEvent(600, 105, 1000)
         }
         
         if !ImageSearcherInfinite("AdventureRestart.bmp", "F") {
@@ -377,41 +377,41 @@ FinishAdventure() {
         }
     }
             
-    Sleep, 500
+    Sleep, 1000
             
     Loop {
         flagAchive := HasAchivement() 
         
         if (flagAchive = "achieve") { 
-            Sleep, 500
+            Sleep, 1000
             
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 500
+                Sleep, 1000
                 ClickEvent(570, 340, 500)
             }
         } else if (flagAchive = "level") {
-            Sleep, 500
+            Sleep, 1000
    
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 500
+                Sleep, 1000
                 ClickEvent(570, 340, 500)
             }
             
             changeHero = 1
         } else if (flagAchive = "player") {
-            Sleep, 500
+            Sleep, 1000
             
             if !ImageSearcherInfinite("Confirm.bmp", "C") {
-                Sleep, 500
+                Sleep, 1000
                 ClickEvent(570, 340, 500)
             }
         } else if (flagAchive = "raid") {
-            Sleep, 500
+            Sleep, 1000
             ClickEvent(200, 200, 500)
         } else if (flagAchive = "raidOut") {
-            Sleep, 500
+            Sleep, 1000
             ImageSearcherInfinite("RaidOut.bmp", "C")
-            Sleep, 500
+            Sleep, 1000
             ImageSearcherInfinite("AdventureLatest.bmp", "C")
         } else if (flagAchive = "finish") {
             Break
@@ -419,7 +419,7 @@ FinishAdventure() {
 			return false
 		}
         
-        Sleep, 500
+        Sleep, 1000
     }
     
     if (changeHero = 1) {
@@ -431,8 +431,7 @@ FinishAdventure() {
 
 ReturnMain() {
 	while !ImageSearcherOnce("MainScreen.bmp", "F") {
-		ClickEvent(30, 20, 100)
-		Sleep, 2000
+		ClickEvent(30, 20, 3000)
 	}
 }
 
