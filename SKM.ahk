@@ -21,8 +21,8 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ~^!A::
 	InitFunc()
 	MsgBox start
-	;Gosub, CheckKey
-    Gosub, Test
+	Gosub, CheckKey
+    ;Gosub, Test
     return
 
 ~^!S::
