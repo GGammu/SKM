@@ -22,6 +22,7 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 	InitFunc()
 	MsgBox start
 	Gosub, CheckKey
+    ;Gosub, Test
     return
 
 ~^!S::
@@ -49,7 +50,12 @@ CheckKey:
     MsgBox "End"
     
 	return
-	
+
+Test: 
+    ChangingHeroes()
+    
+    return 
+    
 Adventure:
 	Loop {
 		if !StartAdventure() { 
@@ -474,23 +480,103 @@ HasAchivement() {
 }
 
 ChangeHeroes() {
-	Global changeHeroCnt
-	
 	EnterHeroManage()
 	
-	Loop, %changeHeroCnt% {
-		if CheckHeroFullLevel(A_Index) {
-            SettingHeroView()
-			Sleep, 1000
-			if EnterPartyHero(A_Index) {
-				return
-			}
-		}
-		Sleep, 1000
-	}
-	Sleep, 1000
+    ChangingHeroes()
+    
 	LeaveHeroManage()
 }
+
+ChangingHeroes() {
+    Global changeHeroCnt
+    
+	position1:=0
+    position2:=0
+    position3:=0
+    position4:=0
+    
+    Loop, %changeHeroCnt% {
+		if CheckHeroFullLevel(A_Index) {
+            position%A_Index% := A_Index
+        } else {
+            position%A_Index% := 0
+        }
+        
+        Sleep, 1000
+    }
+    
+    Sleep, 1000    
+     
+    SettingHeroView()
+    
+    Sleep, 1000
+            
+    Loop {
+        Loop, 4 {
+            if (position1 + position2 + position3 + position4 = 0) 
+                return
+            
+            if !CheckEnterPartyHero(A_Index) 
+                Continue
+            
+            Sleep, 2000
+            
+            if (position1 <> 0) {
+                Sleep, 2000
+                if (EnterHero(1)) 
+                    position1 := 0
+                Continue
+            }
+            
+            if (position2 <> 0) {
+                Sleep, 2000
+                if (EnterHero(2)) 
+                    position2 := 0
+                Continue
+            }
+            
+            if (position3 <> 0) {
+                Sleep, 2000
+                if (EnterHero(3)) 
+                    position3 := 0
+                Continue
+            }
+            
+            if (position4 <> 0) {
+                Sleep, 2000
+                if (EnterHero(4)) 
+                    position4 := 0
+                Continue
+            }
+            
+            Sleep, 2000
+        }
+        
+        EventDragY(310, 258 , 96, 2000) ;Move 1 row
+    }
+    
+    return
+}
+
+;ChangeHeroes() {
+;	Global changeHeroCnt
+;	firstHero := 0
+;    
+;	EnterHeroManage()
+;	
+;	Loop, %changeHeroCnt% {
+;		if CheckHeroFullLevel(A_Index) {
+;            SettingHeroView()
+;			Sleep, 1000
+;			if EnterPartyHero(A_Index) {
+;				return
+;			}
+;		}
+;		Sleep, 1000
+;	}
+;	Sleep, 1000
+;	LeaveHeroManage()
+;}
 
 EnterHeroManage() {
 	ImageSearcherInfinite("HeroSetting.bmp", "C")
