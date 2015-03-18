@@ -516,8 +516,9 @@ ChangingHeroes() {
             if (position1 + position2 + position3 + position4 = 0) 
                 return
             
-            if !CheckEnterPartyHero(A_Index) 
+            if !CheckEnterPartyHero(A_Index) {
                 Continue
+            }
             
             Sleep, 2000
             
