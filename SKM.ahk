@@ -800,7 +800,7 @@ ImageSearcherInfinite(img, mode) {
 			return false
 		}
 		
-		Sleep, 500
+		Sleep, 200
 	}
 	return false
 }
