@@ -359,22 +359,16 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 7000
+		Sleep, 5000
     } else {
-        Sleep, 7000
+        Sleep, 5000
     }
     
-    Loop {
-        if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
-            Sleep, 1000
-            ImageSearcherOnce("AdventureRestart.bmp", "C")
-        } else {
-            ClickEvent(600, 105, 1000)
-        }
-        
-        if !ImageSearcherInfinite("AdventureRestart.bmp", "F") {
-            Break
-        }
+    if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
+        Sleep, 1000
+        ImageSearcherOnce("AdventureRestart.bmp", "C")
+    } else {
+        ClickEvent(600, 105, 1000)
     }
             
     Sleep, 1000
@@ -512,7 +506,7 @@ ChangingHeroes() {
             
     Loop {
         Loop, 4 {
-			if (position1 + position2 + position3 + position4 = 0) 
+            if (position1 + position2 + position3 + position4 = 0) 
                 return
             
             if !CheckEnterPartyHero(A_Index) {
@@ -520,37 +514,27 @@ ChangingHeroes() {
                 Continue
 			}
             
-			Sleep, 2000
-			
-			if (position1 <> 0) {
-				Sleep, 2000
+            if (position1 <> 0) {
 				if (EnterHero(1)) 
                     position1 := 0
-				Sleep, 2000
                 Continue
             }
             
             if (position2 <> 0) {
-				Sleep, 2000
-                if (EnterHero(2)) 
+			    if (EnterHero(2)) 
                     position2 := 0
-				Sleep, 2000
                 Continue
             }
             
             if (position3 <> 0) {
-				Sleep, 2000
-                if (EnterHero(3)) 
+			    if (EnterHero(3)) 
                     position3 := 0
-				Sleep, 2000
                 Continue
             }
             
             if (position4 <> 0) {
-				Sleep, 2000
-                if (EnterHero(4)) 
+			    if (EnterHero(4)) 
                     position4 := 0
-				Sleep, 2000
                 Continue
             }
             
@@ -610,15 +594,14 @@ CheckHeroFullLevel(i) {
 	x := changeHeroX
 	y := changeHeroY + ((i - 1) * 67)
 	
-	Sleep, 1000
 	ClickEvent(x, y, 1000)
 	
 	if ImageSearcherOnce("HeroLevelFull.bmp", "F") {
 		ImageSearcherOnce("HeroDelete.bmp", "C")
-		return true
+        return true
 	} else {
 		ImageSearcherOnce("HeroX.bmp", "C")
-		return false
+        return false
 	}
 }
 
@@ -670,12 +653,14 @@ CheckEnterPartyHero(i) {
 EnterHero(i) {
 	Global changeHeroX, changeHeroY
 	
-	x := changeHeroX
+    Sleep, 4000
+    
+    x := changeHeroX
 	y := changeHeroY + ((i - 1) * 67)
 	
-	ClickEvent(x, y, 1000)
+    ClickEvent(x, y, 1000)
 	
-	if ImageSearcherOnce("HeroChangeFail.bmp", "F") {
+    if ImageSearcherOnce("HeroChangeFail.bmp", "F") {
 		ClickEvent(200, 200, 1000)
 		return false
 	}
@@ -736,6 +721,7 @@ ClickEvent(x, y, msec) {
 	n := x | y << 16
 	
 	PostMessage, 0x201, 1, %n%, , BlueStacks App Player
+    Sleep, 200
 	PostMessage, 0x202, 0, %n%, , BlueStacks App Player
 	
 	Sleep, msec
@@ -749,12 +735,11 @@ EventDragY(x, y, dp, msec)
 	
 	n := pX | pY << 16
 	PostMessage, 0x201, 0, %n%, , BlueStacks App Player
-
-	pY := y - dp
+    pY := y - dp
 	
 	n := pX | pY << 16
 	PostMessage, 0x200, 0, %n%, , BlueStacks App Player
-	PostMessage, 0x202, 0, %n%, , BlueStacks App Player
+    PostMessage, 0x202, 0, %n%, , BlueStacks App Player
 	
 	Sleep, msec
 	return
@@ -780,6 +765,7 @@ ImageSearcherOnce(img, mode) {
 		N := x | y <<16
 		
 		PostMessage, 0x201, 1, %N%, , BlueStacks App Player
+        Sleep, 200
 		PostMessage, 0x202, 0, %N%, , BlueStacks App Player
 	}
 	return true
@@ -800,7 +786,7 @@ ImageSearcherInfinite(img, mode) {
 			return false
 		}
 		
-		Sleep, 200
+		Sleep, 1000
 	}
 	return false
 }
