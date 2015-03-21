@@ -118,12 +118,11 @@ StartArena() {
         }
         
         ImageSearcherOnce("ArenaReady.bmp", "C")
-        Sleep, 10000
     } else {
         return false
     }
     
-    if ImageSearcherOnce("ArenaStart.bmp", "F") {
+    if ImageSearcherInfinite("ArenaStart.bmp", "F") {
         ImageSearcherOnce("ArenaStart.bmp", "C")
         Sleep, 2000
         return true
@@ -138,7 +137,7 @@ FinishArena() {
         if ImageSearcherOnce("ArenaRestart.bmp", "C") {
             Break
         }
-        Sleep, 5000
+        Sleep, 2000
     }
     
     flag := HasAchivementArena()
@@ -359,7 +358,9 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 3000
+		Sleep, 2000
+		ClickEvent(320, 315, 1000)
+		ClickEvent(320, 315, 1000)
     } else {
         Sleep, 3000
     }
