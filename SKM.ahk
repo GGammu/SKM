@@ -359,9 +359,9 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 5000
+		Sleep, 3000
     } else {
-        Sleep, 5000
+        Sleep, 3000
     }
     
     if ImageSearcherInfinite("AdventureRestart.bmp", "F") {
