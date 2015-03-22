@@ -358,9 +358,9 @@ FinishAdventure() {
 	changeHero := 0
     
     if (flagFinishedAdventure = "success") {
-		Sleep, 2000
-		ClickEvent(320, 315, 1000)
-		ClickEvent(320, 315, 1000)
+		Sleep, 2500
+		ClickEvent(320, 315, 500)
+		ClickEvent(320, 315, 500)
     } else {
         Sleep, 3000
     }
@@ -404,11 +404,10 @@ FinishAdventure() {
             Sleep, 1000
             ClickEvent(200, 200, 500)
         } else if (flagAchive = "raidOut") {
-            Sleep, 1000
             ImageSearcherInfinite("RaidOut.bmp", "C")
-            Sleep, 1000
-            ImageSearcherInfinite("AdventureLatest.bmp", "C")
-        } else if (flagAchive = "finish") {
+		} else if (flagAchive = "enter") {
+			ImageSearcherInfinite("AdventureLatest.bmp", "C")
+		} else if (flagAchive = "finish") {
             Break
         } else {
 			return false
@@ -458,6 +457,8 @@ HasAchivement() {
 			return "raidOut"
 		} else if ImageSearcherOnce("PlayerLevelUp.bmp", "F") {
 			return "player"
+		} else if ImageSearcherOnce("AdventureEnter.bmp", "F") {
+			return "enter"
 		} else if ImageSearcherOnce("AdventureStart.bmp", "F") {
 			return "finish"
 		} else if ImageSearcherOnce("FullHeros.bmp", "F") {
