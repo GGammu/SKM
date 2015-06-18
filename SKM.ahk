@@ -567,6 +567,7 @@ SettingHeroView() {
 	ClickEvent(596, 60, 1000)
 	ImageSearcherOnce("SelectSortLevel.bmp", "C")
 	Sleep, 1000
+	EventDragY(310, 96 , -258, 2000)
 }
 
 CheckHeroFullLevel(i) {
