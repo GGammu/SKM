@@ -359,8 +359,8 @@ FinishAdventure() {
     
     if (flagFinishedAdventure = "success") {
 		Sleep, 2500
-		ClickEvent(320, 315, 500)
-		ClickEvent(320, 315, 500)
+		ClickEvent(320, 315, 1000)
+		ClickEvent(320, 315, 1000)
     } else {
         Sleep, 3000
     }
@@ -446,10 +446,9 @@ HasAchivement() {
 	
 	startTime := A_TickCount
 	Loop {
-		if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
+		if (ImageSearcherOnce("Achievement.bmp", "F")) {
 			return "achieve"
-		} else if (ImageSearcherOnce("FullLevel.bmp", "F") or ImageSearcherOnce("FullLevel_1.bmp", "F") 
-				or ImageSearcherOnce("FullLevel_2.bmp", "F") or ImageSearcherOnce("FullLevel_3.bmp", "F")) {
+		} else if (ImageSearcherOnce("FullLevel.bmp", "F")) {
 			return "level"
 		} else if ImageSearcherOnce("RaidEvent.bmp", "F") {
 			return "raid"
@@ -549,26 +548,6 @@ ChangingHeroes() {
     return
 }
 
-;ChangeHeroes() {
-;	Global changeHeroCnt
-;	firstHero := 0
-;    
-;	EnterHeroManage()
-;	
-;	Loop, %changeHeroCnt% {
-;		if CheckHeroFullLevel(A_Index) {
-;            SettingHeroView()
-;			Sleep, 1000
-;			if EnterPartyHero(A_Index) {
-;				return
-;			}
-;		}
-;		Sleep, 1000
-;	}
-;	Sleep, 1000
-;	LeaveHeroManage()
-;}
-
 EnterHeroManage() {
 	ImageSearcherInfinite("HeroSetting.bmp", "C")
 	Sleep, 1000
@@ -583,10 +562,10 @@ SettingHeroView() {
 	ImageSearcherOnce("ViewHero.bmp", "C")
 	Sleep, 1000
 	ClickEvent(535, 60, 1000)
-	ImageSearcherOnce("SortAsc.bmp", "C")
+	ImageSearcherOnce("SelectSortAsc.bmp", "C")
 	Sleep, 1000
 	ClickEvent(596, 60, 1000)
-	ImageSearcherOnce("SortLevel.bmp", "C")
+	ImageSearcherOnce("SelectSortLevel.bmp", "C")
 	Sleep, 1000
 }
 
