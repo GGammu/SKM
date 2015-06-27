@@ -52,8 +52,11 @@ CheckKey:
 	return
 
 Test: 
-    ChangingHeroes()
-    
+    if (ImageSearcherInfinite("PlayerLevelUp.bmp", "F"))
+    {
+		
+		ImageSearcherOnce("LevelUpConfirm.bmp", "C")
+	}
     return 
     
 Adventure:
@@ -150,8 +153,8 @@ HasAchivementArena() {
     startTime := A_TickCount
     
     Loop {
-        if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
-            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+        if (ImageSearcherOnce("Achievement.bmp", "F")) {
+            if !ImageSearcherInfinite("AchieveConfirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 1000)
             }
@@ -226,8 +229,8 @@ HasAchivementTower() {
     startTime := A_TickCount
     
     Loop {
-        if (ImageSearcherOnce("Achievement.bmp", "F") or ImageSearcherOnce("Achievement_1.bmp", "F")) {
-            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+        if (ImageSearcherOnce("Achievement.bmp", "F")) {
+            if !ImageSearcherInfinite("AchieveConfirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 1000)
             }
@@ -380,7 +383,7 @@ FinishAdventure() {
         if (flagAchive = "achieve") { 
             Sleep, 1000
             
-            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+            if !ImageSearcherInfinite("AchieveConfirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 500)
             }
@@ -396,7 +399,7 @@ FinishAdventure() {
         } else if (flagAchive = "player") {
             Sleep, 1000
             
-            if !ImageSearcherInfinite("Confirm.bmp", "C") {
+            if !ImageSearcherInfinite("LevelUpConfirm.bmp", "C") {
                 Sleep, 1000
                 ClickEvent(570, 340, 500)
             }
