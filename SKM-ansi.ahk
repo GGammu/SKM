@@ -18,6 +18,13 @@ SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 ;Screen 640, 400
 ;Client 646, 428
 
+gui, add, edit, w600  ; Add a fairly wide edit control at the top of the window.
+gui, add, text, section, ¿Ã∏ß:  ; Save this control's position and start a new section.
+gui, add, text,, Last Name:
+gui, add, edit, ys  ; Start a new column within this section.
+gui, add, edit
+gui, show
+
 ~^!A::
 	InitFunc()
 	MsgBox start
@@ -562,14 +569,27 @@ LeaveHeroManage() {
 
 SettingHeroView() {
 	ImageSearcherOnce("ViewHero.bmp", "C")
+    
 	Sleep, 1000
+    ImageSearcherOnce("CloseMsg.bmp", "C")
+    Sleep, 500
+	ClickEvent(545, 60, 1000)
+	ImageSearcherOnce("SelectSortLevel.bmp", "C")
+    
+	Sleep, 1000
+	ImageSearcherOnce("CloseMsg.bmp", "C")
+    Sleep, 500
 	ClickEvent(535, 60, 1000)
 	ImageSearcherOnce("SelectSortAsc.bmp", "C")
+    
 	Sleep, 1000
-	ClickEvent(596, 60, 1000)
-	ImageSearcherOnce("SelectSortLevel.bmp", "C")
-	Sleep, 1000
-	EventDragY(310, 96 , -258, 2000)
+    ImageSearcherOnce("CloseMsg.bmp", "C")
+    Sleep, 500
+	ClickEvent(535, 60, 1000)
+	ImageSearcherOnce("SelectSortDesc.bmp", "C")
+    
+    Sleep, 1000
+	EventDragY(310, 96 , -258, 1000)
 }
 
 CheckHeroFullLevel(i) {
