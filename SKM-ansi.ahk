@@ -517,21 +517,21 @@ LeaveHeroManage() {
 SettingHeroView() {
 	ImgClickEvent("ViewHero.bmp", 0, 0)
     
-	ImgClickEvent("CloseMsg.bmp", 1000, 0)
+	ImgClickEvent("CloseMsg.bmp", 500, 0)
     
-	ClickEvent(545, 60, 500, 1000)
+	ClickEvent(545, 60, 500, 500)
     
-	LoopImgClickEvent("SelectSortLevel.bmp", 0, 0)
+	ImgClickEvent("SelectSortLevel.bmp", 0, 0)
     
-    ImgClickEvent("CloseMsg.bmp", 1000, 200)
+    ImgClickEvent("CloseMsg.bmp", 500, 200)
     
     LoopImgClickEvent("SelectSortAsc.bmp", 0, 0)
     
-	ImgClickEvent("CloseMsg.bmp", 1000, 200)
+	ImgClickEvent("CloseMsg.bmp", 500, 200)
     
     LoopImgClickEvent("SelectSortDesc.bmp", 0, 0)
     
-    DragYEvent(310, 96 , -258, 1000, 1000)
+    DragYEvent(310, 96, -258, 500, 500)
 }
 
 CheckHeroFullLevel(i) {
@@ -615,22 +615,9 @@ EnterHero(i) {
 InitFunc() {
 	CoordMode Pixel, Screen
 
-	;Global scnX1, scnY1, scnX2, scnY2, scnW, scnH, borderW, borderH, captionH
 	Global maxWait, stageCnt
 	Global changeHeroCnt, changeHeroX, changeHeroY
 	
-	;WinGetPos, x, y, w, h, BlueStacks App Player
-	;SysGet, captionH, 4 
-	;SysGet, borderW, 32
-	;SysGet, borderH, 33
-	
-	;scnX1 := x + borderW/2
-	;scnY1 := y + captionH + borderH/2
-	;scnW := w - borderW
-	;scnH := h - borderH - captionH
-	;scnX2 := scnX1 + scnW
-	;scnY2 := scnY1 + scnH
-    
 	maxWait := 10000
 	stageCnt := 3
 	changeHeroCnt := 3
@@ -695,53 +682,6 @@ ClickSkill(x, y) {
     ClickEvent(skillX, skillY, 100, 500)
     return
 }
-
-;mode value : F - Find, C - Click, Hero - Find Hero
-;ImageSearcherOnce(img, mode) {
-    ;Global scnX1,scnY1, scnX2, scnY2
-	
-    ;if (mode = "Hero") {
-        ;ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *150 %A_ScriptDir%\img\%img%
-    ;} else {
-        ;ImageSearch, oX, oY, scnX1, scnY1, scnX2, scnY2, *50 %A_ScriptDir%\img\%img%
-    ;}
-	
-    ;if(ErrorLevel <> 0) {
-        ;return false
-    ;}
-	
-    ;if (mode="C" || mode="Hero") {
-        ;x := oX - scnX1
-        ;y := oY - scnY1
-        ;N := x | y <<16
-
-        ;PostMessage, 0x201, 1, %N%, , BlueStacks App Player
-        ;Sleep, 200
-        ;PostMessage, 0x202, 0, %N%, , BlueStacks App Player
-    ;}
-    ;return true
-;}
-
-;mode value : F - Find, C - Click, Hero - Find Hero
-;ImageSearcherInfinite(img, mode) {
-    ;Global maxWait
-	
-    ;startTime := A_TickCount
-	
-    ;Loop {
-        ;if ImageSearcherOnce(img, mode) {
-            ;return true
-        ;}
-
-        ;if ((A_TickCount - startTime) > maxWait) {
-            ;return false
-        ;}
-
-        ;Sleep, 1000
-    ;}
-    
-    ;return false
- ;}
 
 LoopImgFindEvent(img) {
     Global maxWait
