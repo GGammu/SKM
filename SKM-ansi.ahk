@@ -414,7 +414,7 @@ HasAchivement() {
 			return "raidOut"
 		} else if ImgFindEvent("PlayerLevelUp.bmp") {
 			return "player"
-		} else if ImgFindEvent("AdventureEnter.bmp" {
+		} else if ImgFindEvent("AdventureEnter.bmp") {
 			return "enter"
 		} else if ImgFindEvent("AdventureStart.bmp") {
 			return "finish"
@@ -500,7 +500,7 @@ ChangingHeroes() {
             Sleep, 2000
         }
         
-        EventDragY(310, 258 , 96, 0, 2000) ;Move 1 row
+        DragYEvent(310, 258 , 96, 0, 2000) ;Move 1 row
     }
     
     return
