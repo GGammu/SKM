@@ -129,7 +129,7 @@ StartArena() {
 
 FinishArena() {
     Loop {
-        if ImgFindEvent("ArenaRestart.bmp") {
+        if ImgClickEvent("ArenaRestart.bmp", 0, 0) {
             Break
         }
         Sleep, 2000
@@ -474,26 +474,46 @@ ChangingHeroes() {
 			}
             
             if (position1 <> 0) {
-				if (EnterHero(1)) 
-                    position1 := 0
+				if (EnterHero(1)) {
+                    if !ImgFindEvent("Location1.bmp") {
+                        position1 := 0
+                    } else {
+                        position1 := 1
+                    }
+                }
                 Continue
             }
             
             if (position2 <> 0) {
-			    if (EnterHero(2)) 
-                    position2 := 0
+			    if (EnterHero(2)) {
+                    if !ImgFindEvent("Location2.bmp") {
+                        position2 := 0
+                    } else {
+                        position2 := 1
+                    }
+                }
                 Continue
             }
             
             if (position3 <> 0) {
-			    if (EnterHero(3)) 
-                    position3 := 0
+			    if (EnterHero(3)) {
+                    if !ImgFindEvent("Location3.bmp") {
+                        position3 := 0
+                    } else {
+                        position3 := 1
+                    }
+                }
                 Continue
             }
             
             if (position4 <> 0) {
-			    if (EnterHero(4)) 
-                    position4 := 0
+			    if (EnterHero(4)) {
+                    if !ImgFindEvent("Location4.bmp") {
+                        position4 := 0
+                    } else {
+                        position4 := 1
+                    }
+                }
                 Continue
             }
             
